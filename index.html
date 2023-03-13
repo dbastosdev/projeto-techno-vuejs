@@ -15,6 +15,20 @@
     <div id="app">
         <!-- Forma de inserir dados no html que estão no vue.js-->
         <!--{{produtos}}-->
+
+        <!-- criando a lista de produtos-->
+        <section class="produtos">
+            <!-- v-for para iterar entre os produtos que vem da api-->
+            <div v-for="produto in produtos" :key="produto.id" class="produto">
+                <!--Pegando os dados de produto e montando no front-->
+                <img v-bind:src="produto.img" :alt="produto.nome" class="produto_img"> <!-- v-bind usando para alterar elementos no dom-->
+                <!-- Separando as imagens das informações-->
+                <div class="produto_info">
+                    <span class="produto_preco">{{produto.preco}}</span>
+                    <h2 class="produto_titulo">{{produto.nome}}</h2>
+                </div>
+            </div>
+        </section>
     </div>
 
 
