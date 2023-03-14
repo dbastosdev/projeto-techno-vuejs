@@ -7,6 +7,15 @@ const vm = new Vue({
         produtos: []
 
     },
+    // Criando filtros da aplicação front end: 
+    filters: {
+        // Máscara de preços
+        numeroPreco(valor){
+            // return `R$${valor},00` - forma bruta
+            // forma adequada - necessário jogar esse filtro no html
+            return valor.toLocaleString("pt-BR", {style:"currency", currency:"BRL"})
+        }
+    },
     // Métodos com alguma ação na aplicação
     methods: {
         // método para buscar dados externos - local ou via api

@@ -24,7 +24,8 @@
                 <img v-bind:src="produto.img" :alt="produto.nome" class="produto_img"> <!-- v-bind usando para alterar elementos no dom-->
                 <!-- Separando as imagens das informações-->
                 <div class="produto_info">
-                    <span class="produto_preco">{{produto.preco}}</span>
+                    <!-- Atenção ao uso do filtro no html para o valor do produto após o pipe-->
+                    <span class="produto_preco">{{produto.preco | numeroPreco}}</span>
                     <h2 class="produto_titulo">{{produto.nome}}</h2>
                 </div>
             </div>
