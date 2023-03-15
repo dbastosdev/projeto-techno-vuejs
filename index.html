@@ -13,20 +13,51 @@
 <body>
 
     <div id="app">
-        <!-- Forma de inserir dados no html que estão no vue.js-->
-        <!--{{produtos}}-->
+        <!-- Forma de inserir dados no html que estão no vue.js {{produtos}} -->
+
+        <!-- MODAL -->
+        <!-- O modal só será exibido em tela se existir produto usando o v-if-->
+        <section class="modal" v-if="produto">
+            <div class="modal_container">
+                <!-- FOTO -->
+                <div class="modal_img">
+                    <!-- Usando o shorthand de v-bind para modificar dinamicamente o html-->
+                    <img :src="produto.img" alt="produto.nome">
+                </div>
+                <!-- DADOS GERAIS MODAL-->
+                <div class="modal_dados">
+                    <span class="modal_preco">{{produto.preco | numeroPreco}}</span>
+                    <h2 class="modal_titulo">{{produto.nome}}</h2>
+                    <p class="modal_decricao">{{produto.descricao}}</p>
+                    <button class="modal_btn">Adicionar Item</button>
+                </div>
+                <!--AVALIAÇÕES-->
+                <div class="avaliacoes">
+                    <h2 class="avaliacoes_subtitulo">Avaliações</h2>
+                    <ul class="">
+                        <!--Loop no atributo do produto que é composto por diversas avaliações-->
+                        <li v-for="avaliacao in produto.reviews" class="avaliacao">
+                            <p class="avaliacao_descricao">{{avaliacao.descricao}}</p>
+                            <p class="avaliacao_usuario">{{avaliacao.nome}} | {{avaliacao.estrelas}} estrelas</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
 
         <!-- criando a lista de produtos-->
         <section class="produtos">
             <!-- v-for para iterar entre os produtos que vem da api-->
-            <div v-for="produto in produtos" :key="produto.id" class="produto">
+            <!-- @click chama o fetch de um único produto -->
+            <div v-for="item in produtos" @click="fetchProduto(item.id)" :key="item.id" class="produto">
                 <!--Pegando os dados de produto e montando no front-->
-                <img v-bind:src="produto.img" :alt="produto.nome" class="produto_img"> <!-- v-bind usando para alterar elementos no dom-->
+                <img v-bind:src="item.img" :alt="item.nome" class="produto_img"> <!-- v-bind usando para alterar elementos no dom-->
                 <!-- Separando as imagens das informações-->
                 <div class="produto_info">
                     <!-- Atenção ao uso do filtro no html para o valor do produto após o pipe-->
-                    <span class="produto_preco">{{produto.preco | numeroPreco}}</span>
-                    <h2 class="produto_titulo">{{produto.nome}}</h2>
+                    <span class="produto_preco">{{item.preco | numeroPreco}}</span>
+                    <h2 class="produto_titulo">{{item.nome}}</h2>
                 </div>
             </div>
         </section>

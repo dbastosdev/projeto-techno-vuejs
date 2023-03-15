@@ -4,8 +4,8 @@ const vm = new Vue({
     el: '#app',
     // Dados que serão retornados para o html
     data: {
-        produtos: []
-
+        produtos: [], // Lista de produto vindo do fetch
+        produto: null // produto específico
     },
     // Criando filtros da aplicação front end: 
     filters: {
@@ -19,6 +19,7 @@ const vm = new Vue({
     // Métodos com alguma ação na aplicação
     methods: {
         // método para buscar dados externos - local ou via api
+        // Acionado via hook
         fetchProdutos(){
             // fetch realizado de fato e seus métodos concatenados
             fetch("./api/produtos.json")
@@ -26,10 +27,20 @@ const vm = new Vue({
             .then(r => {
                 this.produtos = r
             })
+        },
+        // Método para buscar dados de um produto
+        // Acionamento deste fetch é realizado via @click
+        fetchProduto(id){
+            fetch(`./api/produtos/${id}/dados.json`)
+            .then(r => r.json())
+            .then(r => {
+                this.produto = r
+            })
         }
     },
     // Hooks: Partes do ciclo de vida da aplicação que são usados para chamar algum código
     created(){
+        // Ao criar a aplicação chama o fetch da lista de produtos
         this.fetchProdutos();
     }
 })

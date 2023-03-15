@@ -6,7 +6,7 @@ Reset de estilos padrões do navegador
     box-sizing: border-box;
 }
 
-body, h1, h2, ul, li {
+body, h1, h2, ul, li, p {
     padding: 0px;
     margin: 0px;
 }
@@ -44,6 +44,7 @@ LISTA DE PRODUTOS
     margin-bottom: 40px;
     background: #ffffff;
     box-shadow: 0 0 2rem rgba(0,0,0,.1);
+    cursor: pointer; /* Muda o formato do cursor*/
 }
 
 .produto_img{
@@ -58,4 +59,106 @@ LISTA DE PRODUTOS
 
 .produto_preco{
     color: rgba(0, 0, 0, .5);
+}
+
+/* MODAL */
+
+/*criação do fundo do modal*/
+.modal::before{
+    content:'';
+    position: fixed;
+    top:0px;
+    left: 0px;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /*adiciona um fundo escuro*/
+}
+
+/*posicionando o modal caixa geral*/
+.modal{
+    display: flex; /*posicionamento dos itens*/
+    flex-direction: column;
+    align-items: center;
+    position: absolute; /*posicionamento da caixa*/
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    padding: 80px; /* distancia interna da caixa*/
+}
+
+/*posicionando as informações do modal*/
+.modal_container{
+    position: relative;
+    /*efeito para ficar transparente atrás da foto e o restante do modal colorido*/
+    background: linear-gradient(to right, transparent 250px, white 250px);
+    z-index: 1; /*conteúdo do modal ficará a frente do conteúdo geral do site*/
+    display: grid;
+    align-items: end; /* alinha todos os itens de conteúdo ao final de sua coluna*/
+    gap: 50px; /*distancia entre os itens*/
+    padding: 0px 50px 50px 0;
+}
+
+/*imagem modal*/
+.modal_img{
+    grid-column: 1;
+    /* grid-row: 1/3; */ /*coloca a imagem do modal no meio das informações*/
+    margin-top: 50px; /*distância*/
+}
+
+.modal_img img{
+    /* estilo da imagem*/
+    max-width: 300px;
+    display: block;
+    box-shadow: 0px 3px 4px rgba(0, 0, 0, .1), 0px 4px 10px rgba(0, 0, 0, .2); /*sombra da img*/
+}
+
+/*dados do modal*/
+.modal_dados{
+    grid-column: 2; /*seleciona a coluna que aparecerão*/
+    max-width: 400px; /*limita o tamanho do conteúdo do modal*/
+}
+
+/*avaliações do modal*/
+.avaliacoes{
+    grid-column: 2;
+}
+
+.avaliacao{
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    padding-bottom: 20px;
+}
+
+.avaliacao_subtitulo{
+    font-size: 1.75rem;
+}
+
+.avaliacao_descricao{
+    color: rgba(0, 0, 0, .7);
+    margin: 20px 0 5px 0;
+
+}
+
+.avaliacao_usuario{
+    font-weight: bold;
+}
+
+/*titulo*/
+.modal_titulo{
+    font-size: 3rem;
+}
+
+/*botão interno do modal*/
+.modal_btn{
+    margin-top: 80px;
+    background: #000;
+    cursor: pointer;
+    color: #ffffff;
+    border: none;
+    font-size: 1rem;
+    padding: 10px 25px;
+    font-family: 'Noto Serif';
+}
+
+.modal_btn:active{
+    background: #808080;
 }
