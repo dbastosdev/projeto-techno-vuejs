@@ -15,9 +15,30 @@
     <div id="app">
         <!-- Forma de inserir dados no html que estão no vue.js {{produtos}} -->
 
+        <!-- HEADER -->
+        <header class="header">
+            <!-- Itens fixos como logo, são inseridos de forma estática-->
+            <img class="logo" src="./assets/techno.svg" alt="Techno">
+            <!-- Carrinho que armazena o total de itens em R$ e total em quantidade-->
+            <!-- Quantidade pega o length do array que armazena os produtos-->
+            <!-- R$ pega usa o filtro de formatação de valor para exibir o total em reais item computado-->
+            <div class="carrinho_menu">{{carrinhoTotal | numeroPreco}}  | {{carrinho.length}}</div>
+
+            <ul>
+                <!-- Lógica de remoção de itens-->
+                <!-- O v-for exibe a lista de itens no carrinho por nome-->
+                <li v-for="(item, index) in carrinho">
+                    <p>{{item.nome}}</p>
+                <!-- O @click exibe botões de remoção e passa ao método de remover index do elemento-->
+                    <button @click="removerItem(index)">X</button>
+                </li>
+            </ul>
+        </header>
+
         <!-- MODAL -->
         <!-- O modal só será exibido em tela se existir produto usando o v-if-->
-        <section class="modal" v-if="produto">
+        <!-- O @click aqui indicado é para fechar o modal ao clicar na parte escura chama um método-->
+        <section class="modal" v-if="produto" @click="fecharModal">
             <div class="modal_container">
                 <!-- FOTO -->
                 <div class="modal_img">
@@ -26,10 +47,18 @@
                 </div>
                 <!-- DADOS GERAIS MODAL-->
                 <div class="modal_dados">
+                    <!-- Botão para fechar o modal-->
+                    <!-- Isso ocorre pois o produto exibe o modal por meio do v-if de produto-->
+                    <!-- Então para fechar, basta mudar o estado de produto para falso-->
+                    <button @click="produto = false" class="modal_fechar">X</button>
+
                     <span class="modal_preco">{{produto.preco | numeroPreco}}</span>
                     <h2 class="modal_titulo">{{produto.nome}}</h2>
                     <p class="modal_decricao">{{produto.descricao}}</p>
-                    <button class="modal_btn">Adicionar Item</button>
+                    <!-- Lógica do botão: Se o houver quantidade em estoque do item, aparece o botão que aciona o método adicionarItem-->
+                    <!-- Do contrário, aparece o mesmo botão só que sem chamar o método adicionarItem-->
+                    <button v-if="produto.estoque" class="modal_btn" @click="adicionarItem">Adicionar Item</button>
+                    <button v-else class="modal_btn modal_btn_sem_estoque" disabled>Produto Esgotado</button>
                 </div>
                 <!--AVALIAÇÕES-->
                 <div class="avaliacoes">
@@ -50,7 +79,7 @@
         <section class="produtos">
             <!-- v-for para iterar entre os produtos que vem da api-->
             <!-- @click chama o fetch de um único produto -->
-            <div v-for="item in produtos" @click="fetchProduto(item.id)" :key="item.id" class="produto">
+            <div v-for="item in produtos" @click="abrirModal(item.id)" :key="item.id" class="produto">
                 <!--Pegando os dados de produto e montando no front-->
                 <img v-bind:src="item.img" :alt="item.nome" class="produto_img"> <!-- v-bind usando para alterar elementos no dom-->
                 <!-- Separando as imagens das informações-->

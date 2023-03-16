@@ -28,6 +28,39 @@ body{
     padding: 0 80px; /* respiro no conteúdo do site */
 }
 
+/* HEADER */
+.header{
+    display: flex;
+    justify-content: space-between;
+    max-width: 900px;
+    /* espaço topo e em baixo*/
+    padding: 20px 0;
+    /*centralizar*/
+    margin: 0 auto;
+}
+
+/* logo */
+.logo{
+    width: 80px;
+}
+
+/* carrinho */
+.carrinho_menu::after{
+    content: "";
+    display: inline-block;
+    background: url(./assets/carrinho.svg) no-repeat center center;
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+}
+
+.carrinho_menu{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+
 /*
 LISTA DE PRODUTOS
 */
@@ -96,6 +129,35 @@ LISTA DE PRODUTOS
     align-items: end; /* alinha todos os itens de conteúdo ao final de sua coluna*/
     gap: 50px; /*distancia entre os itens*/
     padding: 0px 50px 50px 0;
+
+    /* chamando a animação */
+    animation: fadeIn .3s forwards;
+}
+
+/* efeito de animação com css*/
+@keyframes fadeIn {
+    from{
+        opacity: 0;
+        transform: translate3d(50px, 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0px, 0, 0);
+    }
+}
+
+/* botão de fechar o modal*/
+.modal_fechar{
+    border-radius: 50%;
+    border: 2px solid #000;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0px 3px 4px rgba(0, 0, 0, .1), 0px 4px 10px rgba(0, 0, 0, .2);
 }
 
 /*imagem modal*/
@@ -161,4 +223,8 @@ LISTA DE PRODUTOS
 
 .modal_btn:active{
     background: #808080;
+}
+
+.modal_btn_sem_estoque{
+    background-color: #808080;
 }
