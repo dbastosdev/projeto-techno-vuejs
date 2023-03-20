@@ -7,7 +7,12 @@ const vm = new Vue({
         produtos: [], // Lista de produto vindo do fetch
         produto: null, // produto específico
         //carrinhoTotal: 0, // total de itens no carrinho - removido e jogado para computed
-        carrinho:[] // itens armazenados no carrinho
+        carrinho:[], // itens armazenados no carrinho
+        mensagemAlerta: "Item adicionado", // Mensagem do alerta que é exibido no html
+        // atributo que controla dinamicamente a exibição ou não da mensagem de alerta
+        // inicia falso e ao ser chamada muda seu estado e adiciona a classe ativo no elemento
+        // Quem modifica esse estado é o método alerta
+        alertaAtivo: false,
     },
     // Criando filtros da aplicação front end: 
     filters: {
@@ -21,6 +26,7 @@ const vm = new Vue({
     // Para cálculos com as variáveis do javascript. É representado por métodos
     // Reduz a carga de processamento da apresentação ao retornar diretamente o valor computado para camada de apresentação
     // Esse computed é reativo. Sempre que os 'datas' mudarem será calculado um valor e será exibido na tela o valor atualizado
+    // evita repetição de código js no html. carrinhoTotal reaproveitável em todo código
     computed:{
         // carrinho total será calculado aqui e passado para o front como um item de 'data'
         carrinhoTotal(){
@@ -85,6 +91,8 @@ const vm = new Vue({
             const {id, nome, preco} = this.produto
                 // adiciona o objeto desestruturado dentro do carrinho
             this.carrinho.push({id, nome, preco})
+            // chama método de alerta
+            this.alerta(`${nome} adicionado ao carrinho`)
         },
         // Método para remover um item
         // Esse método deverá remover um item específico do carrinho. Para isso, será usado
@@ -92,12 +100,45 @@ const vm = new Vue({
         // e passar p.e. a sua posição do array para que seja eliminado e após isso, reicrementado no estoque
         removerItem(index){
             this.carrinho.splice(index,1)
+        },
+        // Checa o localStorage e atribui ao atributo carrinho
+        // Ele deve ser chamado sempre que a instância do vue.js for criada
+        // para isso, deve ficar dentro do Hook created
+        checarLocalStorage(){
+            // checa se há algo no localStorage
+            if(window.localStorage.carrinho){
+                // atribui ao atributo local carrinho o conteúdo
+                // faz o parse para transformar string em objeto
+                this.carrinho = JSON.parse(window.localStorage.carrinho)
+
+            }
+        }, 
+        // Método que modifica o estado de alertaAtivo
+        // pelo método adicionar item. Além disso, é modificado através do mesmo
+        alerta(mensagem){
+            this.mensagemAlerta = mensagem
+            this.alertaAtivo = true
+            // Resetando o alerta para false para deixar de ser exibido em 1,5 segundos
+            setTimeout(() =>{
+                this.alertaAtivo = false;
+            }, 1500)
+        }
+    },
+    // Fica monitorando uma propriedade. Sempre que essa propriedade se modificar, pode-se atvar um código.
+    // específico com alguma ação.
+    watch:{
+        carrinho(){
+            // salva informações no localStorage do navegador: 
+            // Necessário transformar em string antes de salvar
+            // O method "checarLocalStorage" recupera as informaçoes salvas em localStorage
+            window.localStorage.carrinho = JSON.stringify(this.carrinho)
         }
     },
     // Hooks: Partes do ciclo de vida da aplicação que são usados para chamar algum código
     created(){
         // Ao criar a aplicação chama o fetch da lista de produtos
         this.fetchProdutos();
+        this.checarLocalStorage();
     }
 })
 

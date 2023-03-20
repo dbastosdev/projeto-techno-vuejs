@@ -90,6 +90,14 @@
                 </div>
             </div>
         </section>
+
+        <!-- Criando um alerta para página -->
+        <!-- Usa-se o v-bind abreviado para inserir dinamicamente a classe ativo no html -->
+        <!-- Se alertaAtivo = true, adiciona a classe ativo do contrário não adiciona -->
+        <div class="alerta" :class="{ativo: alertaAtivo}">
+            <!-- Exibe a mensagem que chega do vue-->
+            <p class="alerta_mensagem">{{mensagemAlerta}}</p>
+        </div>
     </div>
 
 
