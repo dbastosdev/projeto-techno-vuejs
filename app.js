@@ -13,6 +13,8 @@ const vm = new Vue({
         // inicia falso e ao ser chamada muda seu estado e adiciona a classe ativo no elemento
         // Quem modifica esse estado é o método alerta
         alertaAtivo: false,
+        // Atributo para controlar se o modal está aberto ou fechado. 
+        carrinhoAtivo: false
     },
     // Criando filtros da aplicação front end: 
     filters: {
@@ -80,6 +82,13 @@ const vm = new Vue({
                 this.produto = false
             }
         },
+        // Método para fechar o modal do carrinho. 
+        // É uma alternativa para fechar ao botão
+        clickForaCarrinho({target, currentTarget }){
+            if(target === currentTarget){
+                this.carrinhoAtivo = false
+            }
+        },
         // método para adicionar item no array this.carrinho e incrementar o this.carrinhoTotal
         // Além disso, quando o item for adicionado ao carrinho, deve-se remover uma unidade do estoque
         // Será chamado no botão dentro do modal de adicionar item
@@ -122,22 +131,48 @@ const vm = new Vue({
             setTimeout(() =>{
                 this.alertaAtivo = false;
             }, 1500)
+        },
+        // criando um route para rotear as urls
+        // Esse método é chamado sempre que a instância do vue.js for criada, ou seja, 
+        // está contida no hook oncreate
+        // Esse é um router bem básico.
+        router(){
+            // pega o hash da url
+            const hash = document.location.hash;
+            // Se o hash existir, faz o fetch do produto por id do dado que veio no hash
+            if(hash){
+                // usa o método de fetch de produto que aguarda um id como parâmetro
+                // usamos o replace para trocar o # que vem no hash para nada e poder fazer o fetch
+                this.fetchProduto(hash.replace("#", ""))
+            }
         }
     },
     // Fica monitorando uma propriedade. Sempre que essa propriedade se modificar, pode-se atvar um código.
     // específico com alguma ação.
     watch:{
+        // Monitoramento do carrinho de compras. Sempre que essa muda, salva no localStorage
         carrinho(){
             // salva informações no localStorage do navegador: 
             // Necessário transformar em string antes de salvar
             // O method "checarLocalStorage" recupera as informaçoes salvas em localStorage
             window.localStorage.carrinho = JSON.stringify(this.carrinho)
+        },
+        // Monitorando os produtos que estão sendo clicados: 
+        // Sempre que produto se modifica, altera o route
+        // função é mudar dados da página
+        produto(){
+            // Altera o título da página
+            document.title = this.produto.nome || "Techno"
+            // Altera a url da página
+            const hash = this.produto.id || ""
+            history.pushState(null,null, `#${hash}`)
         }
     },
     // Hooks: Partes do ciclo de vida da aplicação que são usados para chamar algum código
     created(){
         // Ao criar a aplicação chama o fetch da lista de produtos
         this.fetchProdutos();
+        this.router();
         this.checarLocalStorage();
     }
 })

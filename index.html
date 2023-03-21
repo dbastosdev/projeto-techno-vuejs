@@ -22,17 +22,9 @@
             <!-- Carrinho que armazena o total de itens em R$ e total em quantidade-->
             <!-- Quantidade pega o length do array que armazena os produtos-->
             <!-- R$ pega usa o filtro de formatação de valor para exibir o total em reais item computado-->
-            <div class="carrinho_menu">{{carrinhoTotal | numeroPreco}}  | {{carrinho.length}}</div>
-
-            <ul>
-                <!-- Lógica de remoção de itens-->
-                <!-- O v-for exibe a lista de itens no carrinho por nome-->
-                <li v-for="(item, index) in carrinho">
-                    <p>{{item.nome}}</p>
-                <!-- O @click exibe botões de remoção e passa ao método de remover index do elemento-->
-                    <button @click="removerItem(index)">X</button>
-                </li>
-            </ul>
+                                        <!-- Ao ser clicado, joga o carrinhoAtivo propriedade do vue para true -->
+            <div class="carrinho_menu" @click="carrinhoAtivo = true">{{carrinhoTotal | numeroPreco}}  | {{carrinho.length}}</div>
+            
         </header>
 
         <!-- MODAL -->
@@ -88,6 +80,35 @@
                     <span class="produto_preco">{{item.preco | numeroPreco}}</span>
                     <h2 class="produto_titulo">{{item.nome}}</h2>
                 </div>
+            </div>
+        </section>
+
+        <!-- Criando o carrinho da página -->
+                                        <!-- Classe inserida dinamicamente para indicar carrinho ativo-->
+                                        <!-- Será possível fechar o modal ao clicar fora do carrinho também-->
+        <section class="carrinho_modal" :class="{ativo: carrinhoAtivo}" @click="clickForaCarrinho">
+            <div class="carrinho_container">
+                <!-- Botão para fechar tela. Altera o status do carrinhoAtivo -->
+                <button class="carrinho_fechar" @click="carrinhoAtivo = false">X</button>
+                <h2 class="carrinho_titulo">Carrinho</h2>
+                <!-- Utiliza o v-if e v-else para exibir os itens do carrinho ou em caso do carrinho vazio, exibir mensagem-->
+                <div v-if="carrinho.length > 0">
+                    <ul class="carrinho_lista">
+                        <!-- Laço de repetição para repetir os itens do carrinho com v-for-->
+                        <li v-for="(item, index) in carrinho" class="carrinho_item">
+                            <p>{{item.nome}}</p>
+                                                        <!-- Aplica filtro de preço-->
+                            <p class="carrinho_preco">{{item.preco | numeroPreco}}</p>
+                            <button class="carrinho_remover" @click="removerItem(index)">X</button>
+                        </li>
+                    </ul>
+                    <!-- Exibe o total do carrinho-->
+                    <p class="carrinho_total">Total: {{carrinhoTotal | numeroPreco}}</p>
+                    <button class="carrinho_finalizar">Finalizar Compra</button>
+                </div>
+                <!-- Se o carrinho estiver vazio, exibe a mensagem abaixo-->
+                <!-- Se estiver com pelo menos um item, ele exibe o item do carrinho-->
+                <p v-else>O carrinho está vazio</p>
             </div>
         </section>
 
