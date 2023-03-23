@@ -121,7 +121,23 @@ const vm = new Vue({
                 this.carrinho = JSON.parse(window.localStorage.carrinho)
 
             }
-        }, 
+        },
+        // Método que vai atualizar o estoque sempre que um produto for adicionado ao carrinho
+        // Com um backend, seria uma função que dispararia um POST ou PUT para atualizar
+        // o estoque para que não saísse compras sem ter produtos. 
+        // É ativado sempre toda vez que o produto for modificado. Ou seja, o produto que está em watch
+        compararEstoque(){
+            // Avalia a quantidade de itens no carrinho 
+            const items = this.carrinho.filter(item =>{
+                // Se o id do item do carrinho, for igual ao id do produto clicado, 
+                // na prática não seria id que é único e sim descrição ou código do tipo de produto
+                if(item.id === this.produto.id){
+                    return true
+                }
+            })
+            // atualiza o estoque
+            this.produto.estoque = this.produto.estoque - items.length
+        },
         // Método que modifica o estado de alertaAtivo
         // pelo método adicionar item. Além disso, é modificado através do mesmo
         alerta(mensagem){
@@ -166,6 +182,11 @@ const vm = new Vue({
             // Altera a url da página
             const hash = this.produto.id || ""
             history.pushState(null,null, `#${hash}`)
+            // Se houver produto, chama função para comparar o estoque de modo a não permitir
+            // que se adicione no carrinho mais itens do que há no estoque
+            if(this.produto){
+                this.compararEstoque()
+            }
         }
     },
     // Hooks: Partes do ciclo de vida da aplicação que são usados para chamar algum código
